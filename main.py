@@ -20,5 +20,6 @@ def run():
     delete_empty_folders(src_path)
 
 
+
 if __name__ == '__main__':
     run()
