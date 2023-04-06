@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import shutil
 
+global dest_path
+dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
 
 def get_files(folder):
     date_frmt = folder.split('\\')[-1]
