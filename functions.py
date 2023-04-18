@@ -2,9 +2,11 @@ import datetime as dt
 import pandas as pd
 import os
 import shutil
+import tqdm
 
 global dest_path
 dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
+
 
 def get_files(folder):
     date_frmt = folder.split('\\')[-1]
@@ -34,7 +36,7 @@ def get_files(folder):
 
 def move_files(folder):
     global dest_path
-    for file in os.listdir(folder):
+    for file in tqdm.tqdm(os.listdir(folder)):
         src = f'{folder}/{file}'
         dest = f'{dest_path}/{file}'
         shutil.move(src, dest)
