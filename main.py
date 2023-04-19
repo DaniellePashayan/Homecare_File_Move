@@ -1,5 +1,5 @@
 import os
-from functions import get_files, delete_empty_folders, move_files
+from functions import get_files, delete_empty_folders, move_files, correct_folder_names
 
 global src_path
 global dest_path
@@ -11,6 +11,7 @@ src_path = f'{dest_path}/BOT/Medical Records'
 def run():
     global src_path
     global dest_path
+    correct_folder_names(src_path)
     for folder in os.listdir(src_path):
         if (len(os.listdir(src_path))) > 0:
             path = os.path.join(src_path, folder)

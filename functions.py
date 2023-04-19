@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import shutil
 import tqdm
+import re
 
 global dest_path
 dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
@@ -32,6 +33,18 @@ def get_files(folder):
                 existing_df.to_excel(writer, index = None)
     else:
         df.to_excel(output_path, index = None)
+
+
+def correct_folder_names(folder):
+    for subfolder in os.listdir(folder):
+        path = os.path.join(folder, subfolder)
+        new_foldername = re.sub(r'\s\(\d+\)', '', subfolder)
+        new_path = os.path.join(folder, new_foldername)
+        if not os.path.exists(new_path):
+            os.rename(path, new_path)
+        else:
+            if len(os.listdir(path)) == 0:
+                os.rmdir(path)
 
 
 def move_files(folder):
