@@ -1,4 +1,5 @@
-@Echo Starting Home Care File Move
+@echo off
+echo Starting Home Care File Move
 
 SETLOCAL
 set FILE_PATH=%~dp0
@@ -6,4 +7,4 @@ set SCRIPT_PATH=%FILE_PATH%main.py
 python -u "%SCRIPT_PATH%"
 ENDLOCAL
 
-@Echo Process Completed
+Echo Process Completed
