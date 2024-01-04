@@ -4,6 +4,7 @@ import os
 import shutil
 import tqdm
 import re
+from glob import glob
 
 global dest_path
 dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
@@ -14,7 +15,7 @@ def get_files(folder):
     date = dt.datetime.strptime(date_frmt, "%m_%d_%y")
 
     # get all the files in the folder and add to dataframe
-    files = os.listdir(folder)
+    files = glob(f'{folder}/*.pdf')
     df = pd.DataFrame({'file_date': date, 'file_name': files})
 
     # check if output file exists

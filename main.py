@@ -15,7 +15,7 @@ def run():
     for folder in os.listdir(src_path):
         if (len(os.listdir(src_path))) > 0:
             path = os.path.join(src_path, folder)
-            get_files(path)
+            # get_files(path)
             move_files(path)
 
     delete_empty_folders(src_path)
