@@ -51,9 +51,10 @@ def correct_folder_names(folder):
 def move_files(folder):
     global dest_path
     for file in tqdm.tqdm(os.listdir(folder)):
-        src = f'{folder}/{file}'
-        dest = f'{dest_path}/{file}'
-        shutil.move(src, dest)
+        if file.endswith('.pdf'):
+            src = f'{folder}/{file}'
+            dest = f'{dest_path}/{file}'
+            shutil.move(src, dest)
 
 
 def delete_empty_folders(path):
