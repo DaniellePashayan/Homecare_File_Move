@@ -5,6 +5,9 @@ import shutil
 import tqdm
 import re
 from glob import glob
+import zipfile
+import csv
+
 
 global dest_path
 dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
@@ -50,11 +53,24 @@ def correct_folder_names(folder):
 
 def move_files(folder):
     global dest_path
-    for file in tqdm.tqdm(os.listdir(folder)):
+    
+    records_transferred = 0
+    
+    all_file_names = get_list_of_worked_accounts()
+    
+    for file in os.listdir(folder):
+        print(folder)
+        print(file)
         if file.endswith('.pdf'):
-            src = f'{folder}/{file}'
-            dest = f'{dest_path}/{file}'
-            shutil.move(src, dest)
+            if not was_worked(file, all_file_names):
+            # Extract the filename without extension (assuming account number is part of the filename)
+
+                # Check if the filename (or a part of it) is present in the account number set
+                src = os.path.join(folder, file)
+                dest = os.path.join(dest_path, file)
+                # shutil.move(src, dest)  # Use move fnction from shutil
+                records_transferred +=1
+    print(f'{records_transferred=}')
 
 
 def delete_empty_folders(path):
@@ -62,3 +78,45 @@ def delete_empty_folders(path):
         folder = os.path.join(path, folder)
         if len(os.listdir(folder)) == 0:
             shutil.rmtree(folder)
+
+def get_list_of_worked_accounts():
+    folder_path = "M:/CPP-Data/Sutherland RPA/Northwell Process Automation ETM Files/GOA/Inputs/moved"
+    months = ['2024 05', '2024 06']
+    folders_to_ignore = os.listdir('S:/NewRefCenter/ANewReferralPHI/NS/BOT/Medical Records')
+    
+    for month in months:
+        path = f'{folder_path}/{month}'
+
+        # Open the CSV file for writing
+        with open("file_names.csv", "a", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["File Name", "Folder"])
+
+            # Loop through zip files in the folder
+        
+            for filename in glob(f'{path}/Homecare*.zip'):
+                for folder in folders_to_ignore:
+                    if folder not in filename:
+                        # Open the zip file
+                        with zipfile.ZipFile(filename, 'r') as zip_ref:
+                            # Get a list of file names inside the zip
+                            file_names = [name for name in zip_ref.namelist()]
+
+                            # Write zip filename and list of files to CSV
+                            for file in file_names:
+                                writer.writerow([file,filename])
+    all_file_names = set()
+    with open("file_names.csv", "r") as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Skip the header row
+        
+        for row in reader:
+            # Extract file names from the second column (index 1)
+            all_file_names.add(row[0])
+    return all_file_names
+
+def was_worked(file_name, all_file_names):
+    if file_name in all_file_names:
+        return True
+    else:
+        return False
