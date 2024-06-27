@@ -9,3 +9,5 @@
 .idea
 __pycache__
 .ipynb
+/current_folder_files.csv
+/file_names.csv

@@ -1,5 +1,5 @@
 import os
-from functions import get_files, delete_empty_folders, move_files, correct_folder_names
+from functions import delete_empty_folders, move_files, correct_folder_names
 
 global src_path
 global dest_path
@@ -16,11 +16,10 @@ def run():
         if (len(os.listdir(src_path))) > 0:
             path = os.path.join(src_path, folder)
             # get_files(path)
+
             move_files(path)
 
     delete_empty_folders(src_path)
-
-
 
 if __name__ == '__main__':
     run()
