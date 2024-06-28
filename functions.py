@@ -58,9 +58,7 @@ def move_files(folder):
     
     all_file_names = get_list_of_worked_accounts()
     
-    for file in os.listdir(folder):
-        print(folder)
-        print(file)
+    for file in tqdm(os.listdir(folder)):
         if file.endswith('.pdf'):
             if not was_worked(file, all_file_names):
             # Extract the filename without extension (assuming account number is part of the filename)
@@ -68,7 +66,7 @@ def move_files(folder):
                 # Check if the filename (or a part of it) is present in the account number set
                 src = os.path.join(folder, file)
                 dest = os.path.join(dest_path, file)
-                # shutil.move(src, dest)  # Use move fnction from shutil
+                shutil.move(src, dest)  # Use move fnction from shutil
                 records_transferred +=1
     print(f'{records_transferred=}')
 
