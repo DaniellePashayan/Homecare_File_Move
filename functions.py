@@ -2,7 +2,6 @@ import datetime as dt
 import pandas as pd
 import os
 import shutil
-import tqdm
 import re
 from glob import glob
 import zipfile
