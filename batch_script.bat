@@ -2,7 +2,8 @@
 echo Starting Home Care File Move
 
 SETLOCAL
-set FILE_PATH=%~dp0
+set FILE_PATH=C:\Users\pa_dpashayan\Desktop\PyProjects\Homecare_File_Move
+cd %FILE_PATH%
 set SCRIPT_PATH=%FILE_PATH%main.py
 set VENV_PATH=%FILE_PATH%.venv
 
