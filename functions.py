@@ -6,6 +6,7 @@ import re
 from glob import glob
 import zipfile
 import csv
+from loguru import logger
 
 
 global dest_path
@@ -13,6 +14,7 @@ dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
 
 
 def get_files(folder):
+    logger.info(f'Getting files from {folder}')
     date_frmt = folder.split('\\')[-1]
     date = dt.datetime.strptime(date_frmt, "%m_%d_%y")
 
@@ -36,9 +38,11 @@ def get_files(folder):
                 existing_df.to_excel(writer, index = None)
     else:
         df.to_excel(output_path, index = None)
+    logger.success(f'Files added to {output_path}')
 
 
 def correct_folder_names(folder):
+    logger.info(f'Correcting folder names in {folder}')
     for subfolder in os.listdir(folder):
         path = os.path.join(folder, subfolder)
         new_foldername = re.sub(r'\s\(\d+\)', '', subfolder)
@@ -51,13 +55,14 @@ def correct_folder_names(folder):
 
 
 def move_files(folder):
+    logger.info(f'Moving files from {folder}')
     global dest_path
     
     records_transferred = 0
     
     all_file_names = get_list_of_worked_accounts()
     
-    for file in tqdm(os.listdir(folder)):
+    for file in os.listdir(folder):
         if file.endswith('.pdf'):
             if not was_worked(file, all_file_names):
             # Extract the filename without extension (assuming account number is part of the filename)
@@ -67,7 +72,7 @@ def move_files(folder):
                 dest = os.path.join(dest_path, file)
                 shutil.move(src, dest)  # Use move fnction from shutil
                 records_transferred +=1
-    print(f'{records_transferred=}')
+    logger.success(f'{records_transferred=}')
 
 
 def delete_empty_folders(path):
@@ -75,6 +80,7 @@ def delete_empty_folders(path):
         folder = os.path.join(path, folder)
         if len(os.listdir(folder)) == 0:
             shutil.rmtree(folder)
+    logger.success('Empty folders deleted')
 
 def get_list_of_worked_accounts():
     folder_path = "M:/CPP-Data/Sutherland RPA/Northwell Process Automation ETM Files/GOA/Inputs/moved"
