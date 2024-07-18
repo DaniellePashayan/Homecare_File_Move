@@ -10,7 +10,7 @@ from loguru import logger
 
 
 global dest_path
-dest_path = 'S:/NewRefCenter/ANewReferralPHI/NS/'
+dest_path = '\\\\NASHCN01\\SHAREDATA\\NewRefCenter\\ANewReferralPHI\\NS\\'
 
 
 def get_files(folder):
@@ -25,7 +25,7 @@ def get_files(folder):
     # check if output file exists
     year = dt.datetime.strftime(date, format = '%Y')
     month = dt.datetime.strftime(date, format = '%m')
-    output_path = f'M:/CPP-Data/CBO Westbury Managers/LEADERSHIP/Bot Folder/Part A/Home Care/Outputs/{year} {month}.xlsx'
+    output_path = f'\\\\NT2KWB972SRV03\\SHAREDATA\\CPP-Data\\CBO Westbury Managers\\LEADERSHIP\\Bot Folder\\Part A\\Home Care\\Outputs\\{year} {month}.xlsx'
 
     # if output exists, add it to existing, if not create a new file
     if os.path.exists(output_path):
@@ -83,9 +83,9 @@ def delete_empty_folders(path):
     logger.success('Empty folders deleted')
 
 def get_list_of_worked_accounts():
-    folder_path = "M:/CPP-Data/Sutherland RPA/Northwell Process Automation ETM Files/GOA/Inputs/moved"
+    folder_path = r"\\NT2KWB972SRV03\SHAREDATA\CPP-Data\Sutherland RPA\Northwell Process Automation ETM Files\GOA\Inputs\moved"
     months = ['2024 05', '2024 06']
-    folders_to_ignore = os.listdir('S:/NewRefCenter/ANewReferralPHI/NS/BOT/Medical Records')
+    folders_to_ignore = os.listdir(r'\\NASHCN01\SHAREDATA\NewRefCenter\ANewReferralPHI\NS\BOT\Medical Records')
     
     for month in months:
         path = f'{folder_path}/{month}'
