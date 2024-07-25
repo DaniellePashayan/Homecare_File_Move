@@ -80,7 +80,9 @@ def delete_empty_folders(path):
         folder = os.path.join(path, folder)
         if len(os.listdir(folder)) == 0:
             shutil.rmtree(folder)
-    logger.success('Empty folders deleted')
+            logger.success('Empty folders deleted')
+        else:
+            logger.warning('Folder not empty')
 
 def get_list_of_worked_accounts():
     folder_path = r"\\NT2KWB972SRV03\SHAREDATA\CPP-Data\Sutherland RPA\Northwell Process Automation ETM Files\GOA\Inputs\moved"
