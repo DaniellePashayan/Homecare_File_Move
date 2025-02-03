@@ -72,7 +72,7 @@ def move_files(folder):
                 dest = os.path.join(dest_path, file)
                 shutil.move(src, dest)  # Use move fnction from shutil
                 records_transferred +=1
-    logger.success(f'{records_transferred=}')
+    return records_transferred
 
 
 def delete_empty_folders(path):
