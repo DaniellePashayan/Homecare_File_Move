@@ -20,10 +20,10 @@ def run():
             path = os.path.join(src_path, folder)
             # get_files(path)
 
-            move_files(path)
+            files_moved = move_files(path)
 
     delete_empty_folders(src_path)
-    logger.success('Process completed')
+    logger.success(f'Moved {files_moved} files')
 
 if __name__ == '__main__':
     run()
