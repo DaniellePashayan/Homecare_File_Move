@@ -1,7 +1,7 @@
 import os
 from loguru import logger
 from functions import delete_empty_folders, move_files, correct_folder_names
-from process_status.status_handler import JSONStatus
+from orcca.status_handler import JSONStatus
 
 global src_path
 global dest_path
@@ -22,6 +22,11 @@ def run():
     status.update_status('Running')
     try:
         correct_folder_names(src_path)
+        folders = os.listdir(src_path)
+        if len(folders) == 0 or folders is None:
+            logger.warning('No folders found')
+            status.update_status('Completed')
+            return
         for folder in os.listdir(src_path):
             if (len(os.listdir(src_path))) > 0:
                 path = os.path.join(src_path, folder)
