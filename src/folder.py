@@ -18,6 +18,7 @@ class Folder:
         folders = os.listdir(self.source_path)
         folders = [re.sub(r'\s\(\d+\)', '', subfolder) for subfolder in folders]
         dated_folder = [folder for folder in folders if self.date.strftime('%m_%d_%y') in folder]
+        logger.info(f'Looking for folder with date {self.date.strftime("%m_%d_%y")}')
         if len(dated_folder) == 0:
             logger.error(f'No folder found for date {self.date.strftime("%m_%d_%y")}')
             send_error_notification(f'HomeCare - No folder found for date {self.date.strftime("%m_%d_%y")}')
@@ -28,8 +29,13 @@ class Folder:
     
     def list_files(self):
         self.get_dated_folder()
-        return [file for file in os.listdir(self.dated_folder) if '.pdf' in file]
+        files = [file for file in os.listdir(self.dated_folder) if '.pdf' in file]
+        logger.info(f'Found {len(files)} files in folder {self.dated_folder}')
+        return files
     
+    def save_df_to_csv(self):
+        self.df.to_csv(f'{csv_path}/{self.date.strftime("%Y-%m-%d")}.csv', index=False)
+        
     def convert_files_to_df(self, date:datetime.datetime, file_list:list):
         dict_list = {date.strftime('%m_%d_%y'): file_list}
         
@@ -39,7 +45,8 @@ class Folder:
         self.df = df
         csv_path = f'./logs/trackers/{self.date.strftime("%Y")}/{self.date.strftime("%m %Y")}'
         os.makedirs(csv_path, exist_ok=True)
-        df.to_csv(f'{csv_path}/{self.date.strftime("%m-%d-%y")}.csv', index=False)
+        self.save_df_to_csv()
+    
     
     def copy_files_to_destination(self):
         file_list = self.list_files()
@@ -59,6 +66,7 @@ class Folder:
             except Exception as e:
                 logger.error(f'Error copying {file}: {e}')
                 send_error_notification(f'HomeCare - Error copying {file}: {e}')
+        self.save_df_to_csv()
         return files_moved
     
     def archive_folder(self):
