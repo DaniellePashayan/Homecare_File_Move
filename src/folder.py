@@ -11,6 +11,7 @@ class Folder:
         self.destination_path = r'//NASHCN01/SHAREDATA/NewRefCenter/ANewReferralPHI/NS'
         self.source_path = r'//NASHCN01/SHAREDATA/NewRefCenter/ANewReferralPHI/NS/BOT/Medical Records'
         self.date = date
+        self.csv_path = f'./logs/trackers/{self.date.strftime("%Y")}/{self.date.strftime("%m %Y")}'
         self.df = pd.DataFrame()
         self.dated_folder = None
         
@@ -19,10 +20,18 @@ class Folder:
         folders = [re.sub(r'\s\(\d+\)', '', subfolder) for subfolder in folders]
         dated_folder = [folder for folder in folders if self.date.strftime('%m_%d_%y') in folder]
         logger.info(f'Looking for folder with date {self.date.strftime("%m_%d_%y")}')
-        if len(dated_folder) == 0:
+        
+        # check if dated folder exists in archive
+        archive = os.path.join(self.source_path, 'ARCHIVE', f'{self.date.strftime("%m_%d_%y")}.zip')
+        archive_exists = os.path.exists(archive)
+        
+        if len(dated_folder) == 0 and not archive_exists:
             logger.error(f'No folder found for date {self.date.strftime("%m_%d_%y")}')
             send_error_notification(f'HomeCare - No folder found for date {self.date.strftime("%m_%d_%y")}')
             raise FileNotFoundError(f'No folder found for date {self.date.strftime("%m_%d_%y")}')
+        elif archive_exists:
+            logger.info(f'Folder for date {self.date.strftime("%m_%d_%y")} found in archive.')
+            exit()
         else:
             self.dated_folder = os.path.join(self.source_path, dated_folder[0])
             return self.dated_folder
@@ -34,7 +43,7 @@ class Folder:
         return files
     
     def save_df_to_csv(self):
-        self.df.to_csv(f'{csv_path}/{self.date.strftime("%Y-%m-%d")}.csv', index=False)
+        self.df.to_csv(f'{self.csv_path}/{self.date.strftime("%Y-%m-%d")}.csv', index=False)
         
     def convert_files_to_df(self, date:datetime.datetime, file_list:list):
         dict_list = {date.strftime('%m_%d_%y'): file_list}
