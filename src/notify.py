@@ -2,6 +2,11 @@ import os
 from pushbullet import Pushbullet
 
 def send_error_notification(message):
-    PB_API_KEY = os.getenv('PUSHBULLET_API_KEY')
-    pb = Pushbullet(PB_API_KEY)
-    push = pb.push_note("UHC API Input Generator Error", f"{message}")
+    API_KEYS = []
+    API_KEYS.append(os.getenv('PUSHBULLET_API_KEY'))
+    API_KEYS.append(os.getenv('PUSHBULLET_API_KEY_DAVID'))
+   
+    for api_key in API_KEYS:
+        if api_key:
+            pb = Pushbullet(api_key)
+            pb.push_note("ERROR: Homecare File Move", f"{message}")
