@@ -4,7 +4,6 @@ import os
 import shutil
 import pandas as pd
 import re
-from src.notify import send_error_notification
 
 class Folder:
     def __init__(self, date: datetime.datetime):
@@ -13,7 +12,7 @@ class Folder:
         self.date = date
         self.csv_path = f'./logs/trackers/{self.date.strftime("%Y")}/{self.date.strftime("%m %Y")}'
         self.df = pd.DataFrame()
-        self.dated_folder = None
+        self.dated_folder = ""
         
     def get_dated_folder(self) -> str:
         folders = os.listdir(self.source_path)
@@ -27,7 +26,6 @@ class Folder:
         
         if len(dated_folder) == 0 and not archive_exists:
             logger.error(f'No folder found for date {self.date.strftime("%m_%d_%y")}')
-            send_error_notification(f'HomeCare - No folder found for date {self.date.strftime("%m_%d_%y")}')
             raise FileNotFoundError(f'No folder found for date {self.date.strftime("%m_%d_%y")}')
         elif archive_exists:
             logger.info(f'Folder for date {self.date.strftime("%m_%d_%y")} found in archive.')
@@ -74,7 +72,6 @@ class Folder:
                     logger.debug(f'Copied {file} to {self.destination_path}')
             except Exception as e:
                 logger.error(f'Error copying {file}: {e}')
-                send_error_notification(f'HomeCare - Error copying {file}: {e}')
         self.save_df_to_csv()
         return files_moved
     
